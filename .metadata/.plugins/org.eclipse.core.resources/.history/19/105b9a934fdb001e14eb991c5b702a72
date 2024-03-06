@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hello!</title>
+</head>
+<body style="margin: 50px;">
+    <h1>Hello World~!</h1>
+    <hr>
+    <img src="/sb/img/kakao-logo.png" alt="카카오 로고" width="30%">
+    <img src="/sb/img/naver-logo.jpg" alt="네이버 로고" width="30%">
+    <img th:src="@{/img/kakao-logo.png}" alt="카카오 로고" width="30%">
+</body>
+</html>

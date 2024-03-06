@@ -2,4 +2,7 @@
 <dirs>
     <entry loc="C:\Tools\sts-4.21.1.RELEASE\plugins\org.eclipse.justj.openjdk.hotspot.jre.full.win32.x86_64_17.0.10.v20240120-1143" stamp="1707324800000"/>
     <entry loc="C:\Tools\sts-4.21.1.RELEASE\plugins\org.eclipse.justj.openjdk.hotspot.jre.full.win32.x86_64_17.0.10.v20240120-1143\jre" stamp="1707324800000"/>
+    <entry loc="C:\toollsr\sts-4.21.1.RELEASE\plugins\org.eclipse.justj.openjdk.hotspot.jre.full.win32.x86_64_17.0.10.v20240120-1143" stamp="1707324800000"/>
+    <entry loc="C:\toollsr\jdk17" stamp="1705277969815"/>
+    <entry loc="C:\toollsr\sts-4.21.1.RELEASE\plugins\org.eclipse.justj.openjdk.hotspot.jre.full.win32.x86_64_17.0.10.v20240120-1143\jre" stamp="1707324800000"/>
 </dirs>

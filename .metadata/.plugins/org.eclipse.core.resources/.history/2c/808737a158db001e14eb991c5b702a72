@@ -1,0 +1,74 @@
+package com.example.sb.exercise;
+
+
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+
+
+@Controller
+@RequestMapping("/ex")
+
+public class BasicController {
+	@GetMapping("/hello") // localhost:8090/sb/ex/hello
+	public String hello() {
+		return "exercise/hello";  // hello.html
+	}
+	
+	@GetMapping("/noHtml") // html 파일을 찾지 말고, 직접 데이터를 전송
+	@ResponseBody 
+// Whitelabel Error Page
+//	This application has no explicit mapping for /error, so you are seeing this as a fallback.
+//
+//	Wed Mar 06 09:26:13 KST 2024
+//	There was an unexpected error (type=Internal Server Error, status=500).
+// 이 오류 해결을 위해 ResponseBody 추가
+	public String noHtml() {
+		return "<h1>Hello Spring Boot!!!</h1>";  
+	}
+	
+	@GetMapping("/redirect") 
+	public String redirect() {
+		return "redirect:/ex/hello";  // redirect
+	}
+	
+	
+	@GetMapping("/params") 
+	public String params(Model model) {
+		model.addAttribute("name" ,"제임스");
+		return "exercise/params";
+	}
+	
+	@GetMapping("/params2") // http://localhost:8090/sb/ex/params2?name=브라이언
+	public String params(Model model, HttpServletRequest req) {
+		String name = req.getParameter("name");
+		model.addAttribute("name" ,name);
+		return "exercise/params";
+	}
+	
+	@GetMapping("/params3") 
+	public String params(Model model, String name, int count) {
+		model.addAttribute("name" , name+count);
+		return "exercise/params";
+	}
+	
+	@GetMapping("/memberForm") 
+	public String memberForm() {
+		return "exercise/memberForm";
+	}
+	
+	@PostMapping("/memberForm")
+	public String memberProc(Member member, Model model) {
+		System.out.println(member);
+		model.addAttribute(model);
+		return "exercise/params";
+	}
+	
+	
+}
