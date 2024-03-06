@@ -18,7 +18,7 @@
             <th>uname</th>
             <th>email</th>
             <th>regDate</th>
-            <th>액션</th>
+            <th>pwd</th>
         </tr>
         <tr th:each="user: ${userList}">
             <td th:text="${userStat.count}">1</td>
@@ -26,10 +26,7 @@
             <td th:text="${user.uname}">제임스</td>
             <td th:text="${user.email}">james@gmail.com</td>
             <td th:text="${user.regDate}">2024-03-06</td>
-            <td colspan="2"> 
-				<input type="submit" value="수정">
-                <input type="reset" value="취소">
-			</td>
+            <td th:text="${user.pwd}">dsfahjkjhfdshkjf</td>
         </tr>
     </table>
 </body>
