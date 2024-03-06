@@ -22,6 +22,13 @@ public class User {
 		this.isDeleted = isDeleted;
 	}
 
+	public User(String uid, String pwd, String uname, String email) {
+		this.uid = uid;
+		this.pwd = pwd;
+		this.uname = uname;
+		this.email = email;
+	}
+
 	@Override
 	public String toString() {
 		return "User [uid=" + uid + ", pwd=" + pwd + ", uname=" + uname + ", email=" + email + ", regDate=" + regDate
