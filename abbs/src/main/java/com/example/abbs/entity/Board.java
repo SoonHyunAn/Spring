@@ -10,12 +10,15 @@ public class Board {
 	private LocalDateTime modTime;
 	private int isDeleted;
 	private int viewCount;
-	private int repltCount;
+	private int replyCount;
 	private int likeCount;
 	private String files;
 
+	public Board() {
+	}
+
 	public Board(int bid, String title, String content, String uid, LocalDateTime modTime, int isDeleted, int viewCount,
-			int repltCount, int likeCount, String files) {
+			int replyCount, int likeCount, String files) {
 		this.bid = bid;
 		this.title = title;
 		this.content = content;
@@ -23,12 +26,16 @@ public class Board {
 		this.modTime = modTime;
 		this.isDeleted = isDeleted;
 		this.viewCount = viewCount;
-		this.repltCount = repltCount;
+		this.replyCount = replyCount;
 		this.likeCount = likeCount;
 		this.files = files;
-	}
+	};
 
-	public Board() {
+	@Override
+	public String toString() {
+		return "Board [bid=" + bid + ", title=" + title + ", content=" + content + ", uid=" + uid + ", modTime="
+				+ modTime + ", isDeleted=" + isDeleted + ", viewCount=" + viewCount + ", replyCount=" + replyCount
+				+ ", likeCount=" + likeCount + ", files=" + files + "]";
 	}
 
 	public int getBid() {
@@ -87,12 +94,12 @@ public class Board {
 		this.viewCount = viewCount;
 	}
 
-	public int getRepltCount() {
-		return repltCount;
+	public int getReplyCount() {
+		return replyCount;
 	}
 
-	public void setRepltCount(int repltCount) {
-		this.repltCount = repltCount;
+	public void setReplyCount(int replyCount) {
+		this.replyCount = replyCount;
 	}
 
 	public int getLikeCount() {
@@ -110,12 +117,4 @@ public class Board {
 	public void setFiles(String files) {
 		this.files = files;
 	}
-
-	@Override
-	public String toString() {
-		return "Board [bid=" + bid + ", title=" + title + ", content=" + content + ", uid=" + uid + ", modTime="
-				+ modTime + ", isDeleted=" + isDeleted + ", viewCount=" + viewCount + ", repltCount=" + repltCount
-				+ ", likeCount=" + likeCount + ", files=" + files + "]";
-	}
-
 }

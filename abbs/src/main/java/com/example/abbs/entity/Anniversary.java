@@ -63,5 +63,4 @@ public class Anniversary {
 	public void setIsHoliday(int isHoliday) {
 		this.isHoliday = isHoliday;
 	}
-
 }

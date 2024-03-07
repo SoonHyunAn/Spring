@@ -11,6 +11,9 @@ public class Schedule {
 	private int isImportant;
 	private String memo;
 
+	public Schedule() {
+	}
+
 	public Schedule(int sid, String uid, String sdate, String title, String place, String startTime, String endTime,
 			int isImportant, String memo) {
 		this.sid = sid;
@@ -24,7 +27,11 @@ public class Schedule {
 		this.memo = memo;
 	}
 
-	public Schedule() {
+	@Override
+	public String toString() {
+		return "Schedule [sid=" + sid + ", uid=" + uid + ", sdate=" + sdate + ", title=" + title + ", place=" + place
+				+ ", startTime=" + startTime + ", endTime=" + endTime + ", isImportant=" + isImportant + ", memo="
+				+ memo + "]";
 	}
 
 	public int getSid() {
@@ -98,12 +105,4 @@ public class Schedule {
 	public void setMemo(String memo) {
 		this.memo = memo;
 	}
-
-	@Override
-	public String toString() {
-		return "Schedule [sid=" + sid + ", uid=" + uid + ", sdate=" + sdate + ", title=" + title + ", place=" + place
-				+ ", startTime=" + startTime + ", endTime=" + endTime + ", isImportant=" + isImportant + ", memo="
-				+ memo + "]";
-	}
-
 }

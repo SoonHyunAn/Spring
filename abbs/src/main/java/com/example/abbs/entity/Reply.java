@@ -10,6 +10,9 @@ public class Reply {
 	private int bid;
 	private int isMine;
 
+	public Reply() {
+	}
+
 	public Reply(int rid, String comment, LocalDateTime regTime, String uid, int bid, int isMine) {
 		this.rid = rid;
 		this.comment = comment;
@@ -19,7 +22,10 @@ public class Reply {
 		this.isMine = isMine;
 	}
 
-	public Reply() {
+	@Override
+	public String toString() {
+		return "Reply [rid=" + rid + ", comment=" + comment + ", regTime=" + regTime + ", uid=" + uid + ", bid=" + bid
+				+ ", isMine=" + isMine + "]";
 	}
 
 	public int getRid() {
@@ -69,11 +75,4 @@ public class Reply {
 	public void setIsMine(int isMine) {
 		this.isMine = isMine;
 	}
-
-	@Override
-	public String toString() {
-		return "Reply [rid=" + rid + ", comment=" + comment + ", regTime=" + regTime + ", uid=" + uid + ", bid=" + bid
-				+ ", isMine=" + isMine + "]";
-	}
-
 }
