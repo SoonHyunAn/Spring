@@ -3,31 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>목록</title>
+    <title>Document</title>
     <style>
-        th, td { padding: 3px; }
+        input { padding: 3px; }
     </style>
 </head>
 <body style="margin: 50px;">
-    <h1>사용자 목록</h1>
+    <h1>사용자 수정</h1>
     <hr>
-    <table border="1">
-        <tr>
-            <th>No.</th>
-            <th>uid</th>
-            <th>uname</th>
-            <th>email</th>
-            <th>regDate</th>
-            <th>pwd</th>
-        </tr>
-        <tr th:each="user: ${userList}">
-            <td th:text="${userStat.count}">1</td>
-            <td th:text="${user.uid}">james</td>
-            <td th:text="${user.uname}">제임스</td>
-            <td th:text="${user.email}">james@gmail.com</td>
-            <td th:text="${user.regDate}">2024-03-06</td>
-            <td th:text="${user.pwd}">dsfahjkjhfdshkjf</td>
-        </tr>
-    </table>
+    <form action="/sb/user/update" method="post">
+        <input type="hidden" name="uid" th:value="${user.uid}"><br><br>
+        <input type="text" th:value="${user.uid}" disabled><br><br>
+        <input type="password" name="pwd" placeholder="패스워드"><br><br>
+        <input type="password" name="pwd2" placeholder="패스워드 확인"><br><br>
+        <input type="text" name="uname" th:value="${user.uname}"><br><br>
+        <input type="text" name="email" th:value="${user.email}"><br><br>
+        <input type="submit" value="수정">
+    </form>
 </body>
 </html>
