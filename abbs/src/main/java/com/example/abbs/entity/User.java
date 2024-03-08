@@ -29,6 +29,17 @@ public class User {
 		this.location = location;
 	}
 	
+	public User(String uid, String pwd, String uname, String email, String profile, String github, String insta,
+			String location) {
+		this.uid = uid;
+		this.pwd = pwd;
+		this.uname = uname;
+		this.email = email;
+		this.profile = profile;
+		this.github = github;
+		this.insta = insta;
+		this.location = location;
+	}
 	@Override
 	public String toString() {
 		return "User [uid=" + uid + ", pwd=" + pwd + ", uname=" + uname + ", email=" + email + ", regDate=" + regDate
