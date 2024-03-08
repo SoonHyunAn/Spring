@@ -15,7 +15,7 @@
 			a { text-decoration: none; }
 			.disabled-link { pointer-events: none; }
 		</style>
-		<script src="/abbs/js/aside.js?v=2"></script> <!-- 서버 바뀔때마다 1씩 바꿔줘야 함-->
+		<script src="/abbs/js/aside.js?v=3"></script> <!-- 서버 바뀔때마다 1씩 바꿔줘야 함-->
 	</header>
 </head>
 <body>
@@ -54,7 +54,7 @@
 	<div class="container" style="margin-top:80px">
 		<div class="row">
 			<div class="col-3">
-				<aside th:fragment="aside">
+			<aside th:fragment="aside">
 					<div th:if="${session.profile}">
 						<img th:src="@{/file/profile/{x}(x=${session.profile})}" class="rounded-circle" width="90%">
 					</div>
