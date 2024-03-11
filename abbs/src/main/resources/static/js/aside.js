@@ -7,7 +7,9 @@ $(document).ready(function () { // event 등록
     $('#stateMsgInput').attr({ 'class': 'mt-2' }); // 입력창(stateMsgInput) class의 d-none 을 없애줌. -> 보이게 해줌.
     $('#stateInput').val($('#stateMsg').text()); // 입력창에 stateMsg 내용이 보이게
   });
-  $('#stateMsgSubmit').click(changeStateMsg); // 이벤트 등록
+  $('#stateMsgSubmit').click(changeStateMsg); // 이벤트 등록 - 오늘의 한줄 변경
+
+  $('getWeatherButton').click(getWeather); // 날씨
 });
 
 
@@ -23,4 +25,14 @@ function changeStateMsg() {
       $('#stateMsg').html(stateInputVal); // 변경한 값을 표시
     }
   });
+}
+
+function getWeather(){
+  $.ajax({ 
+    type: 'GET',
+    url: '/abbs/aside/weather',
+    success: function(result){
+      $('#weather').html(result);
+  }
+});
 }
