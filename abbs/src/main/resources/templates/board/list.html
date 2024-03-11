@@ -13,7 +13,7 @@
 		function search() {
 			const field = $('#field').val();
 			const query = $('#query').val();
-			const uri = '/abbs/board/list?p=' + [[${session.currentBoardPage}]] +'&f=' + field + '&q=' + query
+			const uri = '/abbs/board/list?p=' + [[${ session.currentBoardPage }]] + '&f=' + field + '&q=' + query
 			location.href = encodeURI(uri);
 		}
 	</script>
@@ -30,9 +30,69 @@
 
 			<div class="col-9">
 				<main id="main">
-					<h3><strong>일정표</strong></h3>
+					<table class="table table-sm table-borderless">
+						<tr>
+							<td style="width: 52%; text-align: left">
+								<h3><strong class="me-5">게시글 목록</strong>
+									<span style="font-size:16px"><a href="/abbs/board/insert"><i class="fa-solid fa-pen-to-square"></i> 글
+											쓰기</a></span>
+								</h3>
+							</td>
+							<td style="width: 16%">
+								<select class="form-control" id="field">
+									<option value="title" ${field eq 'title' ? 'selected' : '' }>제목</option>
+									<option value="content" ${field eq 'content' ? 'selected' : '' }>본문</option>
+									<option value="uname" ${field eq 'uname' ? 'selected' : '' }>글쓴이</option>
+								</select>
+							</td>
+							<td style="width: 24%">
+								<span th:unlesss="${query}">
+									<input class="form-control" type="text" id="query" placeholder="검색할 내용">
+								</span>
+								<span th:if="${query}">
+									<input class="form-control" type="text" id="query" value="${query}">
+								</span>
+							</td>
+							<td style="width: 8%">
+								<button class="btn btn-outline-primary" onclick="search()">검색</button>
+							</td>
+						</tr>
+					</table>
 					<hr>
 
+					<table class="table">
+						<tr>
+							<th style="width: 8%">ID</th>
+							<th style="width: 52%">제목</th>
+							<th style="width: 14%">글쓴이</th>
+							<th style="width: 16%">수정시간</th>
+							<th style="width: 10%">조회수</th>
+						</tr>
+						<tr th:each="board: ${boardList}">
+							<td>${board.bid}</td>
+							<td>
+								<a href="/abbs/board/detail?bid=${board.bid}&uid=${board.uid}">${board.title}</a>
+								<a th:href="@{/board/detail/{x}/{y}(x=${board.bid}, y=${board.uid})}">[[${board.title}]]</a>
+								<span th:if="${board.replyCount ge 1}">
+									<span class="text-danger"> &#91; [[${board.replyCount}]] &#93; </span>
+								</span>
+							</td>
+							<td>[[${board.uname}]]</td>
+							<td>[[${#temporals.format(board.modTime, 'yyyy-MM-dd HH:mm')}]]</td>
+							<td>[[${board.viewCount}]]</td>
+						</tr>
+					</table>
+
+					<ul class="pagination justify-content-center mt-4">
+						<li class="page-item"><a class="page-link" href="#"><i class="fa-solid fa-less-than"></i></a></li>
+							<div th:each="page: ${pageList}">
+								<li class="page-item [[${session.currentBoardPage eq page ? 'active' : ''}]]">
+									<a class="page-link" th:href="@{/board/list(p=${page}, f=${field}, q=${query})}">[[${page}]]</a>
+								</li>
+							</div>
+						<li class="page-item"><a class="page-link" href="#"><i class="fa-solid fa-greater-than"></i></a></li>
+					</ul>
+					</c:forEach>
 				</main>
 			</div>
 		</div>
