@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.example.abbs.entity.Board;
 import com.example.abbs.service.BoardService;
 
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 
 @Controller
@@ -48,17 +49,20 @@ public class BoardController {
 	}
 	
 	@GetMapping("/insert")
-	public String insert(String uid, HttpSession session) {
-		if (session.getAttribute(uid)==null)
+	public String insert(String uid, HttpSession session, HttpServletRequest request) {
+		session = request.getSession();
+		String sessUid = (String) session.getAttribute("sessUid");
+		session.setAttribute("sessUid", sessUid);
+		
+		if (sessUid==null||sessUid.equals(""))
 			return "redirect:/user/login";
-		else
-			session.setAttribute("sessUid", uid);
+			
 		return "board/insert";
 	}
 	
 	@PostMapping("/insert")
 	public String insertProc(String title, String content, String uid, HttpSession session) {
-		session.setAttribute("sessUid", uid);
+		uid = (String) session.getAttribute("sessUid");
 		Board board = new Board(title, content, uid);
 		boardService.insertBoard(board);
 		return "redirect:/board/list";
