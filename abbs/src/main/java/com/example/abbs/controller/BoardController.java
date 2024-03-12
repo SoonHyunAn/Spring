@@ -34,15 +34,15 @@ public class BoardController {
 	@Value("${spring.servlet.multipart.location}") private String uploadDir;
 
 	@GetMapping("/list")
-	public String list(@RequestParam(name="p", defaultValue="1") int page,
-				@RequestParam(name="f", defaultValue="title") String field,
-				@RequestParam(name="q", defaultValue="") String query,
-				HttpSession session, Model model) {
+	public String list(@RequestParam(name = "p", defaultValue = "1") int page,
+			@RequestParam(name = "f", defaultValue = "title") String field,
+			@RequestParam(name = "q", defaultValue = "") String query, HttpSession session, Model model) {
 		List<Board> boardList = boardService.getBoardList(page, field, query);
-		
+
 		int totalBoardCount = boardService.getBoardCount(field, query);
-		int totalPages = (int) Math.ceil(totalBoardCount / (double)BoardService.COUNT_PER_PAGE);
-		int startPage = (int) Math.ceil((page-0.5)/BoardService.PAGE_PER_SCREEN - 1) * BoardService.PAGE_PER_SCREEN + 1;
+		int totalPages = (int) Math.ceil(totalBoardCount / (double) BoardService.COUNT_PER_PAGE);
+		int startPage = (int) Math.ceil((page - 0.5) / BoardService.PAGE_PER_SCREEN - 1) * BoardService.PAGE_PER_SCREEN
+				+ 1;
 		int endPage = Math.min(totalPages, startPage + BoardService.PAGE_PER_SCREEN - 1);
 		List<String> pageList = new ArrayList<>();
 		for (int i = startPage; i <= endPage; i++)
@@ -55,33 +55,33 @@ public class BoardController {
 		model.addAttribute("startPage", startPage);
 		model.addAttribute("endPage", endPage);
 		model.addAttribute("pageList", pageList);
-		
+
 		return "board/list";
 	}
-	
+
 	@GetMapping("/insert")
 	public String insertForm(String uid, HttpSession session, HttpServletRequest request) {
 		session = request.getSession();
 		String sessUid = (String) session.getAttribute("sessUid");
 		session.setAttribute("sessUid", sessUid);
-		
-		if (sessUid==null||sessUid.equals(""))
+
+		if (sessUid == null || sessUid.equals(""))
 			return "redirect:/user/login";
-			
+
 		return "board/insert";
 	}
-	
+
 	@PostMapping("/insert")
 	public String insertProc(String title, String content, HttpSession session, MultipartHttpServletRequest req) {
 		String sessUid = (String) session.getAttribute("sessUid");
 		List<MultipartFile> uploadFileList = req.getFiles("files");
-		
+
 		List<String> fileList = new ArrayList<>();
-		for (MultipartFile part: uploadFileList) {
+		for (MultipartFile part : uploadFileList) {
 			// 첨부 파일이 없는 경우 - application/octet-stream
 			if (part.getContentType().contains("octet-stream"))
 				continue;
-			
+
 			String filename = part.getOriginalFilename();
 			String uploadPath = uploadDir + "upload/" + filename;
 			try {
@@ -98,13 +98,13 @@ public class BoardController {
 	}
 
 	@GetMapping("/detail/{bid}/{uid}")
-	public String detail(@PathVariable int bid, @PathVariable String uid, String option,
-			HttpSession session, Model model) {
-		// 본인이 조회한 경우 조회수 증가시키지 않음
+	public String detail(@PathVariable int bid, @PathVariable String uid, String option, HttpSession session,
+			Model model) {
+		// 본인 조회/댓글 작성 후 조회수 증가시키지 않음
 		String sessUid = (String) session.getAttribute("sessUid");
-		if (!uid.equals(sessUid))
+		if (!uid.equals(sessUid) && (option == null || option.equals("")))
 			boardService.increaseViewCount(bid);
-		
+
 		Board board = boardService.getBoard(bid);
 		String jsonFiles = board.getFiles();
 		if (!(jsonFiles == null || jsonFiles.equals(""))) {
@@ -112,34 +112,31 @@ public class BoardController {
 			model.addAttribute("fileList", fileList);
 		}
 		model.addAttribute("board", board);
-		
+
 		List<Reply> replyList = replyService.getReplyList(bid);
 		model.addAttribute("replyList", replyList);
 		return "board/detail";
 	}
-	
 
 	@GetMapping("/delete/{bid}")
 	public String delete(@PathVariable int bid, HttpSession session) {
 		boardService.deleteBoard(bid);
 		return "redirect:/board/list?p=" + session.getAttribute("currentBoardPage");
 	}
-	
+
 	@PostMapping("/reply")
 	public String reply(int bid, String uid, String comment, HttpSession session) {
 		String sessUid = (String) session.getAttribute("sessUid");
-		int isMine = sessUid.equals(uid) ? 1: 0;
+		int isMine = sessUid.equals(uid) ? 1 : 0;
 		Reply reply = new Reply(comment, sessUid, bid, isMine);
-		
+
 		replyService.insertReply(reply);
 		boardService.increaseReplyCount(bid);
-		
-		return "redirect:/board/detail/" + bid + "/" + uid;
-	}
-	
-}
 
- 
+		return "redirect:/board/detail/" + bid + "/" + uid + "?option=DNI";
+	}
+
+}
 
 // 혼자 짜본 코드 - 파일 미구현
 //@GetMapping("/insert")
@@ -161,4 +158,3 @@ public class BoardController {
 //	boardService.insertBoard(board);
 //	return "redirect:/board/list";
 //}
-
