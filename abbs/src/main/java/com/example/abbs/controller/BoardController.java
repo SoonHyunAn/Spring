@@ -17,8 +17,10 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import com.example.abbs.entity.Board;
+import com.example.abbs.entity.Like;
 import com.example.abbs.entity.Reply;
 import com.example.abbs.service.BoardService;
+import com.example.abbs.service.LikeService;
 import com.example.abbs.service.ReplyService;
 import com.example.abbs.util.JsonUtil;
 
@@ -30,6 +32,7 @@ import jakarta.servlet.http.HttpSession;
 public class BoardController {
 	@Autowired private BoardService boardService;
 	@Autowired private ReplyService replyService;
+	@Autowired private LikeService likeService;
 	@Autowired private JsonUtil jsonUtil;
 	@Value("${spring.servlet.multipart.location}") private String uploadDir;
 
@@ -112,7 +115,8 @@ public class BoardController {
 			model.addAttribute("fileList", fileList);
 		}
 		model.addAttribute("board", board);
-
+		model.addAttribute("count", board.getLikeCount());
+		
 		List<Reply> replyList = replyService.getReplyList(bid);
 		model.addAttribute("replyList", replyList);
 		return "board/detail";
@@ -134,6 +138,21 @@ public class BoardController {
 		boardService.increaseReplyCount(bid);
 
 		return "redirect:/board/detail/" + bid + "/" + uid + "?option=DNI";
+	}
+	
+	// AJAX 처리
+	@GetMapping("/like/{bid}")
+	public String like (@PathVariable int bid, HttpSession session, Model model) {
+		String sessUid = (String) session.getAttribute("sessUid");
+		Like like = likeService.getLike(bid, sessUid);
+		if (like == null) 
+			likeService.insertLike(new Like(sessUid, bid, 1));
+		else 
+			likeService.toggleLike(like);
+		int count = likeService.getLikeCount(bid);
+		// boardService. 	board.likeCount update 만들예정
+		model.addAttribute("count", count);
+		return "board/detail::#likeCount"; // 콜론 두개 : 자바의 람다식 표현 - 값이 바뀌는 것
 	}
 
 }
