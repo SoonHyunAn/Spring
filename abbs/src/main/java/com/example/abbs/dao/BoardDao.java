@@ -25,7 +25,7 @@ public interface BoardDao {
 	@Select("SELECT b.*, u.uname FROM board b"
 			+ " JOIN users u ON b.uid=u.uid"
 			+ " WHERE b.isDeleted=0 and ${field} like #{query}"
-			+ " ORDER BY b.modTime desc"
+			+ " ORDER BY b.bid desc"
 			+ " LIMIT #{count} OFFSET #{offset}")
 	List<Board> getBoardList(String field, String query, int count, int offset);
 	
