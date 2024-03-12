@@ -49,7 +49,7 @@ public class BoardController {
 	}
 	
 	@GetMapping("/insert")
-	public String insert(String uid, HttpSession session, HttpServletRequest request) {
+	public String insertForm(String uid, HttpSession session, HttpServletRequest request) {
 		session = request.getSession();
 		String sessUid = (String) session.getAttribute("sessUid");
 		session.setAttribute("sessUid", sessUid);
