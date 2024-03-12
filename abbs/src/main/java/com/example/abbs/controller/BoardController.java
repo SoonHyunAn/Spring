@@ -124,6 +124,19 @@ public class BoardController {
 		boardService.deleteBoard(bid);
 		return "redirect:/board/list?p=" + session.getAttribute("currentBoardPage");
 	}
+	
+	@PostMapping("/reply")
+	public String reply(int bid, String uid, String comment, HttpSession session) {
+		String sessUid = (String) session.getAttribute("sessUid");
+		int isMine = sessUid.equals(uid) ? 1: 0;
+		Reply reply = new Reply(comment, sessUid, bid, isMine);
+		
+		replyService.insertReply(reply);
+		boardService.increaseReplyCount(bid);
+		
+		return "redirect:/board/detail/" + bid + "/" + uid;
+	}
+	
 }
 
  
