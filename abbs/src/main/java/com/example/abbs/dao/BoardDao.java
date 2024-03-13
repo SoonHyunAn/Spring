@@ -18,14 +18,14 @@ public interface BoardDao {
 	Board getBoard(int bid);
 	
 	@Select("select count(b.bid) from board b"
-	         + " JOIN users u ON b.uid=u.uid"
-	         + " where b.isDeleted=0 and ${field} like #{query}")
+			+ " JOIN users u ON b.uid=u.uid"
+			+ " where b.isDeleted=0 and ${field} like #{query}")
 	int getBoardCount(String field, String query);
 	
 	@Select("SELECT b.*, u.uname FROM board b"
 			+ " JOIN users u ON b.uid=u.uid"
 			+ " WHERE b.isDeleted=0 and ${field} like #{query}"
-			+ " ORDER BY b.bid desc"
+			+ " ORDER BY b.modTime desc"
 			+ " LIMIT #{count} OFFSET #{offset}")
 	List<Board> getBoardList(String field, String query, int count, int offset);
 	
@@ -42,5 +42,8 @@ public interface BoardDao {
 	
 	@Update("update board set ${field}=${field}+1 where bid=#{bid}")
 	void increaseCount(String field, int bid);	
+	
+	@Update("update board set likeCount=#{count} where bid=#{bid}")
+	void updateLikeCount(int bid, int count);
 	
 }

@@ -24,7 +24,6 @@ import com.example.abbs.service.LikeService;
 import com.example.abbs.service.ReplyService;
 import com.example.abbs.util.JsonUtil;
 
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 
 @Controller
@@ -37,19 +36,20 @@ public class BoardController {
 	@Value("${spring.servlet.multipart.location}") private String uploadDir;
 
 	@GetMapping("/list")
-	public String list(@RequestParam(name = "p", defaultValue = "1") int page,
-			@RequestParam(name = "f", defaultValue = "title") String field,
-			@RequestParam(name = "q", defaultValue = "") String query, HttpSession session, Model model) {
+	public String list(@RequestParam(name="p", defaultValue="1") int page,
+				@RequestParam(name="f", defaultValue="title") String field,
+				@RequestParam(name="q", defaultValue="") String query,
+				HttpSession session, Model model) {
 		List<Board> boardList = boardService.getBoardList(page, field, query);
-
+		
 		int totalBoardCount = boardService.getBoardCount(field, query);
-		int totalPages = (int) Math.ceil(totalBoardCount / (double) BoardService.COUNT_PER_PAGE);
-		int startPage = (int) Math.ceil((page - 0.5) / BoardService.PAGE_PER_SCREEN - 1) * BoardService.PAGE_PER_SCREEN
-				+ 1;
+		int totalPages = (int) Math.ceil(totalBoardCount / (double)BoardService.COUNT_PER_PAGE);
+		int startPage = (int) Math.ceil((page-0.5)/BoardService.PAGE_PER_SCREEN - 1) * BoardService.PAGE_PER_SCREEN + 1;
 		int endPage = Math.min(totalPages, startPage + BoardService.PAGE_PER_SCREEN - 1);
-		List<String> pageList = new ArrayList<>();
+		List<Integer> pageList = new ArrayList<>();
 		for (int i = startPage; i <= endPage; i++)
-			pageList.add(String.valueOf(i));
+			pageList.add(i);
+		
 		session.setAttribute("currentBoardPage", page);
 		model.addAttribute("boardList", boardList);
 		model.addAttribute("field", field);
@@ -58,35 +58,29 @@ public class BoardController {
 		model.addAttribute("startPage", startPage);
 		model.addAttribute("endPage", endPage);
 		model.addAttribute("pageList", pageList);
-
+		
 		return "board/list";
 	}
-
+	
 	@GetMapping("/insert")
-	public String insertForm(String uid, HttpSession session, HttpServletRequest request) {
-		session = request.getSession();
-		String sessUid = (String) session.getAttribute("sessUid");
-		session.setAttribute("sessUid", sessUid);
-
-		if (sessUid == null || sessUid.equals(""))
-			return "redirect:/user/login";
-
+	public String insertForm() {
 		return "board/insert";
 	}
-
+	
 	@PostMapping("/insert")
-	public String insertProc(String title, String content, HttpSession session, MultipartHttpServletRequest req) {
+	public String insertProc(String title, String content, 
+			MultipartHttpServletRequest req, HttpSession session) {
 		String sessUid = (String) session.getAttribute("sessUid");
 		List<MultipartFile> uploadFileList = req.getFiles("files");
-
+		
 		List<String> fileList = new ArrayList<>();
-		for (MultipartFile part : uploadFileList) {
+		for (MultipartFile part: uploadFileList) {
 			// 첨부 파일이 없는 경우 - application/octet-stream
 			if (part.getContentType().contains("octet-stream"))
 				continue;
-
+			
 			String filename = part.getOriginalFilename();
-			String uploadPath = uploadDir + "upload/" + filename;
+			String uploadPath = uploadDir  + "upload/" + filename ;
 			try {
 				part.transferTo(new File(uploadPath));
 			} catch (Exception e) {
@@ -95,19 +89,20 @@ public class BoardController {
 			fileList.add(filename);
 		}
 		String files = jsonUtil.list2Json(fileList);
+		
 		Board board = new Board(title, content, sessUid, files);
 		boardService.insertBoard(board);
 		return "redirect:/board/list";
 	}
 
 	@GetMapping("/detail/{bid}/{uid}")
-	public String detail(@PathVariable int bid, @PathVariable String uid, String option, HttpSession session,
-			Model model) {
-		// 본인 조회/댓글 작성 후 조회수 증가시키지 않음
+	public String detail(@PathVariable int bid, @PathVariable String uid, String option,
+			HttpSession session, Model model) {
+		// 본인이 조회한 경우 또는 댓글 작성후에는 조회수 증가시키지 않음
 		String sessUid = (String) session.getAttribute("sessUid");
-		if (!uid.equals(sessUid) && (option == null || option.equals("")))
+		if (!uid.equals(sessUid) && (option==null || option.equals("")))
 			boardService.increaseViewCount(bid);
-
+		
 		Board board = boardService.getBoard(bid);
 		String jsonFiles = board.getFiles();
 		if (!(jsonFiles == null || jsonFiles.equals(""))) {
@@ -115,42 +110,52 @@ public class BoardController {
 			model.addAttribute("fileList", fileList);
 		}
 		model.addAttribute("board", board);
+		
+		// 좋아요 처리
+		Like like = likeService.getLike(bid, sessUid);
+		if (like == null)
+			session.setAttribute("likeClicked", 0);
+		else
+			session.setAttribute("likeClicked", like.getValue());
 		model.addAttribute("count", board.getLikeCount());
 		
 		List<Reply> replyList = replyService.getReplyList(bid);
 		model.addAttribute("replyList", replyList);
 		return "board/detail";
 	}
-
+	
 	@GetMapping("/delete/{bid}")
 	public String delete(@PathVariable int bid, HttpSession session) {
 		boardService.deleteBoard(bid);
 		return "redirect:/board/list?p=" + session.getAttribute("currentBoardPage");
 	}
-
+	
 	@PostMapping("/reply")
 	public String reply(int bid, String uid, String comment, HttpSession session) {
 		String sessUid = (String) session.getAttribute("sessUid");
-		int isMine = sessUid.equals(uid) ? 1 : 0;
+		int isMine = (sessUid.equals(uid)) ? 1 : 0;
 		Reply reply = new Reply(comment, sessUid, bid, isMine);
-
+		
 		replyService.insertReply(reply);
 		boardService.increaseReplyCount(bid);
-
+		
 		return "redirect:/board/detail/" + bid + "/" + uid + "?option=DNI";
 	}
 	
 	// AJAX 처리
 	@GetMapping("/like/{bid}")
-	public String like (@PathVariable int bid, HttpSession session, Model model) {
+	public String like(@PathVariable int bid, HttpSession session, Model model) {
 		String sessUid = (String) session.getAttribute("sessUid");
 		Like like = likeService.getLike(bid, sessUid);
-		if (like == null) 
+		if (like == null) {
 			likeService.insertLike(new Like(sessUid, bid, 1));
-		else 
-			likeService.toggleLike(like);
+			session.setAttribute("likeClicked", 1);
+		} else {
+			int value = likeService.toggleLike(like);
+			session.setAttribute("likeClicked", value);
+		}
 		int count = likeService.getLikeCount(bid);
-		// boardService. 	board.likeCount update 만들예정
+		boardService.updateLikeCount(bid, count);
 		model.addAttribute("count", count);
 		return "board/detail::#likeCount"; // 콜론 두개 : 자바의 람다식 표현 - 값이 바뀌는 것
 	}
