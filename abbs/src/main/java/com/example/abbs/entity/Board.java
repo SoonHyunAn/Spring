@@ -55,11 +55,6 @@ public class Board {
 		this.files = files;
 	}
 
-//	public Board(String title, String content, String uid) {
-//		this.title = title;
-//		this.content = content;
-//		this.uid = uid;
-//	}
 
 	public int getBid() {
 		return bid;

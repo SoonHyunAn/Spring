@@ -29,7 +29,8 @@
 						<tr>
 							<td style="width: 52%; text-align: left">
 								<h3><strong class="me-5">게시글 목록</strong>
-									<span style="font-size:16px"><a href="/abbs/board/insert"><i class="fa-solid fa-pen-to-square"></i> 글 쓰기</a></span>
+									<span style="font-size:16px"><a href="/abbs/board/insert">
+										<i class="fa-solid fa-pen-to-square"></i> 글 쓰기</a></span>
 								</h3>
 							</td>
 							<td style="width: 16%">
@@ -80,7 +81,8 @@
 					<!-- pagination -->
 					<ul class="pagination justify-content-center mt-4">
 						<span th:if="${session.currentBoardPage gt 10}">
-							<li class="page-item"><a class="page-link" th:href="@{/board/list(p=${startPage-1},f=${field},q=${query})}"><i class="fa-solid fa-less-than"></i></a></li>
+							<li class="page-item"><a class="page-link" th:href="@{/board/list(p=${startPage-1},f=${field},q=${query})}">
+							<i class="fa-solid fa-less-than"></i></a></li>
 						</span>
 						<span th:if="${session.currentBoardPage le 10}">
 							<li class="page-item"><a class="page-link" href="#"><i class="fa-solid fa-less-than"></i></a></li>
@@ -108,7 +110,8 @@
 							</span>
 						</span>
 						<span th:if="${totalPages gt endPage}">
-							<li class="page-item"><a class="page-link" th:href="@{/board/list(p=${endPage+1},f=${field},q=${query})}"><i class="fa-solid fa-greater-than"></i></a></li>
+							<li class="page-item"><a class="page-link" th:href="@{/board/list(p=${endPage+1},f=${field},q=${query})}">
+							<i class="fa-solid fa-greater-than"></i></a></li>
 						</span>
 						<span th:if="${totalPages eq endPage}">
 							<li class="page-item"><a class="page-link" href="#"><i class="fa-solid fa-greater-than"></i></a></li>
