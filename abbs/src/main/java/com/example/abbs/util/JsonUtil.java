@@ -18,7 +18,7 @@ public class JsonUtil {
 	
 	public List<String> json2List(String jsonStr) {
 		JSONParser parser = new JSONParser();
-		List<String> list =null;
+		List<String> list = null;
 		try {
 			JSONObject jsonObj	= (JSONObject) parser.parse(jsonStr);
 			JSONArray jsonArr = (JSONArray) jsonObj.get("list");
