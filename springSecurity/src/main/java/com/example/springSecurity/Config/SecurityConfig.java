@@ -18,9 +18,9 @@ public class SecurityConfig {
 			.headers(x -> x.frameOptions(y -> y.disable())) // CK Editor Image Upload 시 필요
 			.authorizeHttpRequests(auth -> auth
 					.dispatcherTypeMatchers(DispatcherType.FORWARD).permitAll()
-					.requestMatchers("/user/register",
+					.requestMatchers("/user/register", "/user/list", 
 							"/img/**","/css/**", "/js/**", "/error/**").permitAll() // ** : 모든 파일 엑세스
-					.requestMatchers("/admin/**").hasAuthority("ROLE_ADMIN")
+					.requestMatchers("/admin/**").hasAuthority("ROLE_ADMIN") // 관리자 전용 경로 지정
 					.anyRequest().authenticated())
 			.formLogin(auth -> auth
 				.loginPage("/user/login") 	// login form - requestMatchers에서 지정하지 않아도 괜찮음

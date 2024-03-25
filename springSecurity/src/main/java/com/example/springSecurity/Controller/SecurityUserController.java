@@ -1,6 +1,8 @@
 package com.example.springSecurity.Controller;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
@@ -92,4 +94,11 @@ public class SecurityUserController {
 		
 	}
 	
+	@GetMapping ("/list")
+	public String list (Model model) {
+		List<SecurityUser> userList = securityService.getSecurityUserList(1);
+		model.addAttribute("userList", userList);
+		
+		return "user/list";
+	}
 }

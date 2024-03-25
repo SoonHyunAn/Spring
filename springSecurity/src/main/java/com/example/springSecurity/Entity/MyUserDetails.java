@@ -13,8 +13,8 @@ import lombok.RequiredArgsConstructor;
 // Social Login - OAuth2User 구현
 @RequiredArgsConstructor
 public class MyUserDetails implements UserDetails {
-	private final SecurityUser securityUser;
 
+	private final SecurityUser securityUser;
 	// 사용자의 권한을 return - 관리자/사용자 구분
 	// GrantedAuthority 를 상속받은 누구나 ? 자리에 올 수 있다
 	@Override
