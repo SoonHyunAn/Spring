@@ -18,12 +18,12 @@ public class SecurityConfig {
 			.headers(x -> x.frameOptions(y -> y.disable())) // CK Editor Image Upload 시 필요
 			.authorizeHttpRequests(auth -> auth
 					.dispatcherTypeMatchers(DispatcherType.FORWARD).permitAll()
-					.requestMatchers("/user/login", "/user/register", 
+					.requestMatchers("/user/register", 
 							"/img/**","/css/**", "/js/**", "/error/**").permitAll() // ** : 모든 파일 엑세스
 					.requestMatchers("/admin/**").hasAuthority("ADMIN")
 					.anyRequest().authenticated())
 			.formLogin(auth -> auth
-				.loginPage("/user/login") 	// login form
+				.loginPage("/user/login") 	// login form - requestMatchers에서 지정하지 않아도 괜찮음
 				.loginProcessingUrl("/user/login") 
 				// spring security 가 낚아챔. UserDetailService 구현객체에서 처리해주어야 함.
 				.usernameParameter("uid").passwordParameter("pwd") 
