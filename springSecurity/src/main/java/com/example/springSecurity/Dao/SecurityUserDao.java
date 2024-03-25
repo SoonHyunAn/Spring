@@ -12,7 +12,7 @@ import com.example.springSecurity.Entity.SecurityUser;
 @Mapper
 public interface SecurityUserDao {
 
-	@Select("select * from securityUser where uid = #{uid")
+	@Select("select * from securityUser where uid = #{uid}")
 	SecurityUser getUserByUid(String uid);
 
 	@Select("select * from securityUser where isDeleted = 0 order by regDate desc" 
@@ -23,7 +23,7 @@ public interface SecurityUserDao {
 	int getSecurityUserCount();
 
 	@Insert("insert into securityUser values (#{uid}, #{pwd}, #{uname},"
-			+ " #{email}, default, default, #{picture}, #{provider}, default")
+			+ " #{email}, default, default, #{picture}, #{provider}, default)")
 	void insertSecurityuser(SecurityUser securityUser);
 
 	@Update("update securityUser set pwd = #{pwd}, uname = #{uname}, "

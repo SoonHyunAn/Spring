@@ -18,9 +18,9 @@ public class SecurityConfig {
 			.headers(x -> x.frameOptions(y -> y.disable())) // CK Editor Image Upload 시 필요
 			.authorizeHttpRequests(auth -> auth
 					.dispatcherTypeMatchers(DispatcherType.FORWARD).permitAll()
-					.requestMatchers("/user/register", 
+					.requestMatchers("/user/register",
 							"/img/**","/css/**", "/js/**", "/error/**").permitAll() // ** : 모든 파일 엑세스
-					.requestMatchers("/admin/**").hasAuthority("ADMIN")
+					.requestMatchers("/admin/**").hasAuthority("ROLE_ADMIN")
 					.anyRequest().authenticated())
 			.formLogin(auth -> auth
 				.loginPage("/user/login") 	// login form - requestMatchers에서 지정하지 않아도 괜찮음
@@ -31,6 +31,12 @@ public class SecurityConfig {
 				.defaultSuccessUrl("/user/loginSuccess", true) 	
 				// 내가 로그인 후 해야할 일 진행 Ex) session setting, 오늘의 명언 등
 				.permitAll()
+					)
+			.logout(auth -> auth
+					.logoutUrl("/user/logout")
+					.invalidateHttpSession(true) // 로그아웃시 세션 초기화
+					.deleteCookies("JSESSIONID") // 로그아웃시 쿠키 삭제
+					.logoutSuccessUrl("/user/login")
 					);
 		
 			return http.build();
