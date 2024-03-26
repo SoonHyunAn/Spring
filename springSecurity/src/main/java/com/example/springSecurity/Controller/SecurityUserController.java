@@ -143,7 +143,6 @@ public class SecurityUserController {
 		return "user/list";
 	}
 	
-	@SuppressWarnings("unchecked")
 	@ResponseBody
 	@GetMapping("/detail/{uid}")
 	public String detail(@PathVariable String uid) {

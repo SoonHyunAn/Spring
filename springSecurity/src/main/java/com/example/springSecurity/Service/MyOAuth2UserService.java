@@ -96,9 +96,9 @@ public class MyOAuth2UserService extends DefaultOAuth2UserService {
 	            if (securityUser == null) {            // 가입이 안되어 있으므로 가입 진행
 	               Map<String, String> properties = (Map) oAuth2User.getAttribute("properties");
 	               Map<String, Object> account = (Map) oAuth2User.getAttribute("kakao_account");
-	               uname = (String) properties.get("nickname");
+	               uname = (String) properties.get("profile_nickname");
 	               uname = (uname == null) ? "kakao_user" : uname;
-	               email = (String) account.get("email");
+	               email = "ash7106@daum.net";
 	               picture = (String) properties.get("profile_image");
 	               securityUser = SecurityUser.builder()
 	                     .uid(uid).pwd(hashedPwd).uname(uname).email(email).picture(picture)
