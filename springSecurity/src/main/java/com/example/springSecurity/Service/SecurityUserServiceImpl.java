@@ -41,7 +41,7 @@ public class SecurityUserServiceImpl implements SecurityUserService{
 
 	@Override
 	public void insertSecurityUser(SecurityUser securityUser) {
-		securityDao.insertSecurityuser(securityUser);
+		securityDao.insertSecurityUser(securityUser);
 	}
 
 	@Override

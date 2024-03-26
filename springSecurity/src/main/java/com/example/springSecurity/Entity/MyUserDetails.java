@@ -2,21 +2,33 @@ package com.example.springSecurity.Entity;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Map;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 
 import lombok.RequiredArgsConstructor;
 
-// Spring Security 가 login post 요청을 낚아채서 login을 진행하는 코드
-// Local Login - User Details 구현
-// Social Login - OAuth2User 구현
-@RequiredArgsConstructor
-public class MyUserDetails implements UserDetails {
+// Spring Security가 로그인 POST 요청을 낚아채서 로그인을 진행시킴
+// 로컬 로그인 - UserDetails 구현
+// 소셜 로그인 - OAuth2User 구현
+public class MyUserDetails implements UserDetails, OAuth2User {
+	private SecurityUser securityUser;
+	private Map<String, Object> attributes;
+	
+	public MyUserDetails() { }
+	// 로컬 로그인 - 스프링이 생성자 방식으로 의존성 주입
+	public MyUserDetails(SecurityUser securityUser) {
+		this.securityUser = securityUser;
+	}
+	// 소셜 로그인 
+	public MyUserDetails(SecurityUser securityUser, Map<String, Object> attributes) {
+		this.securityUser = securityUser;
+		this.attributes = attributes;
+	}
 
-	private final SecurityUser securityUser;
-	// 사용자의 권한을 return - 관리자/사용자 구분
-	// GrantedAuthority 를 상속받은 누구나 ? 자리에 올 수 있다
+	// 사용자의 권한을 리턴
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
 		Collection<GrantedAuthority> collect = new ArrayList<>();
@@ -40,8 +52,8 @@ public class MyUserDetails implements UserDetails {
 	}
 
 	@Override
-	public boolean isAccountNonExpired() { // 유효계정인가? 
-		if (securityUser.getIsDeleted()==0)
+	public boolean isAccountNonExpired() {
+		if (securityUser.getIsDeleted() == 0)
 			return true;
 		return false;
 	}
@@ -61,4 +73,18 @@ public class MyUserDetails implements UserDetails {
 		return true;
 	}
 
+	@Override
+	public Map<String, Object> getAttributes() {
+		return attributes;
+	}
+
+	@Override
+	public String getName() {
+		return null;
+	}
+
+	public SecurityUser getSecurityUser() {
+		return securityUser;
+	}
+	
 }

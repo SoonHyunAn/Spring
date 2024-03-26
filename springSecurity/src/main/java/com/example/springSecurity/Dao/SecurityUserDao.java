@@ -19,12 +19,12 @@ public interface SecurityUserDao {
 	+ " limit #{count} offset #{offset}")
 	List<SecurityUser> getSecurityUserList(int count, int offset);
 
-	@Select("select count(uid) from securityUser where is Deleted = 0")
+	@Select("select count(uid) from securityUser where isDeleted = 0")
 	int getSecurityUserCount();
 
-	@Insert("insert into securityUser values (#{uid}, #{pwd}, #{uname},"
-			+ " #{email}, default, default, #{picture}, #{provider}, default)")
-	void insertSecurityuser(SecurityUser securityUser);
+	@Insert("insert into securityUser values (#{uid}, #{pwd}, #{uname}, #{email},"
+			+ " default, default, #{picture}, #{provider}, default)")
+	void insertSecurityUser(SecurityUser securityUser);
 
 	@Update("update securityUser set pwd = #{pwd}, uname = #{uname}, "
 			+ "email=#{email}, picture = #{picture} where uid=#{uid}")
