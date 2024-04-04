@@ -1,7 +1,9 @@
 /.metadata/
+.metadata/
 
 # ckkim add
 myKeys.properies
+application.properties
 
 *.jar
 *.war
@@ -69,4 +71,5 @@ local.properties
 # Typically, this file would be tracked if it contains build/dependency configurations:
 #.project
 LoveBridge/src/main/resources/application.properties
+reactProject/src/main/resources/application.properties
 MidTermProject_HiddenGem/
